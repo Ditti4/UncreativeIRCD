@@ -3,6 +3,7 @@
 #include <string.h>
 #include <errno.h>
 #include <netdb.h>
+#include <time.h>
 // #include <arpa/inet.h>
 // #include <sys/socket.h>
 // #include <sys/types.h>
@@ -50,7 +51,7 @@ void callback_notice(int sockfd, char *message) {
     char *command = malloc(50 * sizeof(char));
     char *param1 = malloc(LINE_LENGTH * sizeof(char));
     char *param2 = malloc(LINE_LENGTH * sizeof(char));
-     sscanf(message, "%s %s %[^\n]s", command, param1, param2);
+    sscanf(message, "%s %s %[^\n]s", command, param1, param2);
     int userindex = find_user_by_socket(sockfd);
     printf("notice to destination %s from user %d: %s\n", param1, userindex, param2);
     privmsg(userindex, param1, param2);
@@ -184,4 +185,19 @@ void callback_user(int sockfd, char *message) {
     free(command);
     free(param1);
     free(param2);
+}
+
+void callback_pong(int sockfd, char *message) {
+    char *command = malloc(50 * sizeof(char));
+    int userindex = find_user_by_socket(sockfd);
+    // was there actually a ping request since the last pong?
+    if(users[userindex].last_ping < users[userindex].last_pong) {
+        quit_user(userindex, "Server says: Fix your client. You must not pong without a ping.");
+    } else {
+        // something else
+        struct timespec current_time;
+        clock_gettime(CLOCK_REALTIME, &current_time);
+        users[userindex].last_pong = current_time.tv_sec;
+    }
+    free(command);
 }

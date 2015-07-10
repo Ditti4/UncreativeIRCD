@@ -159,6 +159,9 @@ void error_handler() {
 
 // used for establishing connections
 char *ip_from_addrinfo(struct addrinfo *info) {
+    if(!info) {
+        return NULL;
+    }
     void *addr;
     char *ipstring = malloc(INET6_ADDRSTRLEN * sizeof(char));
     if(info->ai_family == AF_INET) {

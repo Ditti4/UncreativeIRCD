@@ -36,6 +36,8 @@ struct __user {
     char *hostname;
     int sockfd; // for iteration
     int channelcount;
+    long int last_ping;
+    long int last_pong;
     channel_t *channels; // for whois data
 };
 

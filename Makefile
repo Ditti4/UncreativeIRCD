@@ -6,10 +6,10 @@ BIN=ircd
 all: $(BIN)
 
 $(BIN): $(OBJ)
-	$(CC) -o $@ $^
+	$(CC) -o $@ $^ -lrt
 
 %.o: %.c %.h
-	$(CC) -Wall -Wextra -o $@ -c $<
+	$(CC) -Wall -Wextra -Wshadow -O2 -o $@ -c $<
 
 .PHONY: clean
 clean:

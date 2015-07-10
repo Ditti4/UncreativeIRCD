@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <time.h>
 // #include <arpa/inet.h>
 // #include <sys/socket.h>
 // #include <sys/types.h>
@@ -120,7 +121,6 @@ int send_from_user_to_user(int userindex, int userindex2, char *message) {
     if(!message) {
         return ERROR_EMPTY_MESSAGE;
     }
-    int i;
     char *send_message = malloc(LINE_LENGTH * sizeof(char));
     sprintf(send_message, ":%s!%s@%s %s\r\n", users[userindex].nick, users[userindex].ident, users[userindex].hostname, message);
     if(FD_ISSET(users[userindex2].sockfd, &g_master)) {
@@ -201,6 +201,10 @@ int create_user(int sockfd, char *hostname) {
     strcpy(users[usercount - 1].hostname, hostname);
     users[usercount - 1].channelcount = 0;
     users[usercount - 1].sockfd = sockfd;
+    struct timespec current_time;
+    clock_gettime(CLOCK_REALTIME, &current_time);
+    users[usercount - 1].last_ping = current_time.tv_sec;
+    users[usercount - 1].last_pong = 0;
     users[usercount - 1].channels = NULL;
     return (usercount - 1);
 }

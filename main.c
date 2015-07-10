@@ -81,7 +81,7 @@ void strip_newline(char *string) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(int __attribute__((unused)) argc, char __attribute__((unused)) **argv) {
     g_sockfd = listen_on_port(g_hostname, 20000, AF_INET, 1024);
     if(g_sockfd != -1) {
         printf("Everything's fine. :)\n");
@@ -97,8 +97,6 @@ int main(int argc, char **argv) {
     char *message = malloc(LINE_LENGTH * sizeof(char));
     char *command = malloc(LINE_LENGTH * sizeof(char));
     char *param1 = malloc(LINE_LENGTH * sizeof(char));
-
-    int tempint;
 
     FD_ZERO(&g_master);
     FD_ZERO(&g_read_fds);
@@ -121,6 +119,7 @@ int main(int argc, char **argv) {
     register_callback("chghost", &callback_chghost);
     register_callback("who", &callback_who);
     register_callback("user", &callback_user);
+    register_callback("pong", &callback_pong);
 
     // "keep_running == 1" instead of just "keep_running" because there may come a time when a custom exit code comes in handy
     while(keep_running == 1) {

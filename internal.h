@@ -5,14 +5,14 @@
  * +------------------+
  * |    internal.h    |
  * +------------------+
- * 
+ *
  * This module provides provides internal functions used by
  * other modules of the ircd. The ircd should never, ever
  * use these functions directly – they are not error safe and
  * thus are very likely to fail on some error. Don't ever use
  * these functions if you're not writing a module including
  * your own error checking.
- * 
+ *
  */
 
 extern int errid; // if == 0 then no error, if > 0 then we should gai_strerror() it, otherwise errno is important

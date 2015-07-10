@@ -30,5 +30,6 @@ void callback_nick(int sockfd, char *message);
 void callback_chghost(int sockfd, char *message);
 void callback_who(int sockfd, char *message);
 void callback_user(int sockfd, char *message);
+void callback_pong(int sockfd, char *message);
 
 #endif
